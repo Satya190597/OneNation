@@ -3,7 +3,7 @@ import { Button,StyleSheet, Text, View } from 'react-native';
 import Firebase, {db}from '../../../config/firebase'
 
 
-export default class HomeComponent extends React.Component {
+export default class Home extends React.Component {
     constructor(props:any) {
         super(props)
     }

@@ -24,9 +24,7 @@ export default class Posts extends React.Component {
         db.collection('posts').get().then((snapshots) => {
 
             snapshots.forEach((doc) => {
-
-                console.log(doc.data().category + ' ' + this.props.route.params.CATEGORY)
-                if(doc.data().category === this.props.route.params.CATEGORY) {
+                if(doc.data().category === this.props.navigation.getParam('CATEGORY')) {
                     posts.push({data:doc.data(),docId:doc.id})
                     this.state.postsLenght.push(1)
                     this.state.postsReadButtonText.push('Read More')
@@ -44,13 +42,10 @@ export default class Posts extends React.Component {
     readMore(index) {
         const postsLength = this.state.postsLenght
         const postsReadButtonText = this.state.postsReadButtonText
-        console.log(postsReadButtonText[index])
         postsReadButtonText[index] = postsReadButtonText[index] === 'Read More' ? 'Read Less' : 'Read More'
         postsLength[index] = postsLength[index] === 1 ? undefined : 1
         this.setState({postsLenght:postsLength})
         this.setState({postsReadButtonText:postsReadButtonText})
-
-        console.log(this.state.postsReadButtonText)
         this.createTemplate()
     }
 

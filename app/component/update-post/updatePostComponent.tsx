@@ -23,7 +23,7 @@ export default class UpdatePost extends React.Component {
 
     getPosts() {
 
-        const post = db.collection("posts").doc(this.props.route.params.DOCID)
+        const post = db.collection("posts").doc(this.props.navigation.getParam('DOCID'))
         post.get().then((doc) => {
             if(doc.exists) {
                 console.log('--- DOC PRESENT ---')
