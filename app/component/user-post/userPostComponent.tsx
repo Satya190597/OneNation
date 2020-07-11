@@ -72,7 +72,7 @@ export default class UserPost extends React.Component {
 
         for(let index = 0; index < this.state.allPosts.length; index++) {
            template.push(
-               <View style={styles.card}>
+               <View style={styles.card} key={index}>
                    <Text style={styles.cardTitle}>{this.state.allPosts[index].data.title}</Text>
                    <Text>{this.state.allPosts[index].data.description}</Text>
                    <Text style={styles.cardLink}>{this.state.allPosts[index].data.link}</Text>

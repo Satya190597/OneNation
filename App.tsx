@@ -9,6 +9,7 @@ import SignUp from './app/component/signup/signupComponent'
 import Login from './app/component/login/loginComponent'
 import AddPost from './app/component/add-post/addPostComponent'
 import UserPost from './app/component/user-post/userPostComponent'
+import Posts from './app/component/posts-by-category/postsComponent'
 
 
 function HomeScreen({ navigation }) {
@@ -41,6 +42,7 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeComponent} />
         <Stack.Screen name="AddPost" component={AddPost} />
         <Stack.Screen name="UserPost" component={UserPost} />
+        <Stack.Screen name="Posts" component={Posts} />
       </Stack.Navigator>
     </NavigationContainer>
   );

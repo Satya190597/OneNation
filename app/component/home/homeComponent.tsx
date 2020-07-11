@@ -6,20 +6,11 @@ import Firebase, {db}from '../../../config/firebase'
 export default class HomeComponent extends React.Component {
     constructor(props:any) {
         super(props)
-        this.getAllPosts()
     }
 
     handleSignOut = () => {
         Firebase.auth().signOut()
         this.props.navigation.navigate('Login')
-    }
-
-    getAllPosts = () => {
-        db.collection('posts').get().then((snapshots) => {
-            snapshots.forEach(element => {
-                console.log(element.data())
-            });
-        })
     }
 
     render() {
@@ -31,6 +22,48 @@ export default class HomeComponent extends React.Component {
                 {
                     /**
                      * ---------- First Row. ----------
+                     */
+                }
+                <View style={styles.childcontainer}>
+                    <View style={styles.buttoncontainer}>
+                        <Button
+                        title="SUGGESTION"
+                        style={styles.button}
+                        onPress={()=>{this.props.navigation.navigate('Posts',{CATEGORY:'SUGGESTION'})}}>
+                        </Button>
+                    </View>
+                    <View style={styles.buttoncontainer}>
+                        <Button
+                        title="APPRECIATION"
+                        style={styles.button}
+                        onPress={()=>{this.props.navigation.navigate('Posts',{CATEGORY:'APPRECIATION'})}}>
+                        </Button>
+                    </View>
+                </View>
+                {
+                    /**
+                     * ---------- Second Row. ----------
+                     */
+                }
+                <View style={styles.childcontainer}>
+                    <View style={styles.buttoncontainer}>
+                        <Button
+                        title="REPORT FAKE NEWS"
+                        style={styles.button}
+                        onPress={()=>{this.props.navigation.navigate('Posts',{CATEGORY:'REPORT_FAKE_NEWS'})}}>
+                        </Button>
+                    </View>
+                    <View style={styles.buttoncontainer}>
+                        <Button
+                        title="I NEED HELP"
+                        style={styles.button}
+                        onPress={()=>{this.props.navigation.navigate('Posts',{CATEGORY:'HELP'})}}>
+                        </Button>
+                    </View>
+                </View>
+                {
+                    /**
+                     * ---------- Third Row. ----------
                      */
                 }
                 <View style={styles.childcontainer}>
@@ -51,7 +84,7 @@ export default class HomeComponent extends React.Component {
                 </View>
                 {
                     /**
-                     * ---------- Second Row. ----------
+                     * ---------- Fourth Row. ----------
                      */
                 }
                 <View style={styles.childcontainer}>
