@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeComponent from './app/component/home/homeComponent';
 import SignUp from './app/component/signup/signupComponent'
 import Login from './app/component/login/loginComponent'
+import AddPost from './app/component/add-post/addPostComponent'
 
 
 function HomeScreen({ navigation }) {
@@ -37,6 +38,7 @@ export default function App() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={SignUp} />
         <Stack.Screen name="Home" component={HomeComponent} />
+        <Stack.Screen name="AddPost" component={AddPost} />
       </Stack.Navigator>
     </NavigationContainer>
   );
