@@ -80,7 +80,7 @@ export default class UserPost extends React.Component {
                         <TouchableOpacity onPress={()=> {this.delete(this.state.allPosts[index].docId)}} style={styles.deletebutton}>
                             <Text  style={styles.buttonText}>Delete</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={()=> {this.update}} style={styles.editbutton}>
+                        <TouchableOpacity onPress={()=> {this.props.navigation.navigate('UpdatePost',{DOCID:this.state.allPosts[index].docId})}} style={styles.editbutton}>
                             <Text  style={styles.buttonText}>Edit</Text>
                         </TouchableOpacity>
                     </View>
