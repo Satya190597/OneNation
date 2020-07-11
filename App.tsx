@@ -11,6 +11,7 @@ import AddPost from './app/component/add-post/addPostComponent'
 import UserPost from './app/component/user-post/userPostComponent'
 import Posts from './app/component/posts-by-category/postsComponent'
 import UpdatePost from './app/component/update-post/updatePostComponent'
+import ForgetPassword from './app/component/forget-password/forgetPasswordComponent'
 
 
 function HomeScreen({ navigation }) {
@@ -45,6 +46,7 @@ export default function App() {
         <Stack.Screen name="UserPost" component={UserPost} />
         <Stack.Screen name="Posts" component={Posts} />
         <Stack.Screen name="UpdatePost" component={UpdatePost} />
+        <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
       </Stack.Navigator>
     </NavigationContainer>
   );
