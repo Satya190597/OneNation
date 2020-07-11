@@ -28,10 +28,15 @@ export default class HomeComponent extends React.Component {
                 <View style={styles.childcontainer}>
                     <Text>Home Screen</Text>
                 </View>
+                {
+                    /**
+                     * ---------- First Row. ----------
+                     */
+                }
                 <View style={styles.childcontainer}>
                     <View style={styles.buttoncontainer}>
                         <Button
-                        title="Go to Details"
+                        title="Logout"
                         style={styles.button}
                         onPress={this.handleSignOut}>
                         </Button>
@@ -44,7 +49,27 @@ export default class HomeComponent extends React.Component {
                         </Button>
                     </View>
                 </View>
-               
+                {
+                    /**
+                     * ---------- Second Row. ----------
+                     */
+                }
+                <View style={styles.childcontainer}>
+                    <View style={styles.buttoncontainer}>
+                        <Button
+                        title="My Posts"
+                        style={styles.button}
+                        onPress={()=>{this.props.navigation.navigate('UserPost')}}>
+                        </Button>
+                    </View>
+                    <View style={styles.buttoncontainer}>
+                        <Button
+                        title="Add New Post"
+                        style={styles.button}
+                        onPress={()=>{this.props.navigation.navigate('UserPost')}}>
+                        </Button>
+                    </View>
+                </View>
             </View>
         )
     }
