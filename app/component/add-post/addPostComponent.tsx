@@ -112,7 +112,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         borderColor: '#d3d3d3',
         borderBottomWidth: 1,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontFamily: 'Inter_400Regular'
     },
     button: {
         marginTop: 30,
@@ -128,6 +129,7 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#fff'
+        color: '#fff',
+        fontFamily: 'Inter_400Regular'
     },
 })

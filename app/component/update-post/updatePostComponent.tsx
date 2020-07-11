@@ -47,7 +47,7 @@ export default class UpdatePost extends React.Component {
      */
     updatePost = () => {
 
-        const previouspost = db.collection("posts").doc(this.props.route.params.DOCID)
+        const previouspost = db.collection("posts").doc(this.props.navigation.getParam('DOCID'))
 
         previouspost.update({
             category:this.state.category,

@@ -74,7 +74,7 @@ export default class UserPost extends React.Component {
            template.push(
                <View style={styles.card} key={index}>
                    <Text style={styles.cardTitle}>{this.state.allPosts[index].data.title}</Text>
-                   <Text>{this.state.allPosts[index].data.description}</Text>
+                   <Text style={{fontFamily: 'Inter_400Regular'}}>{this.state.allPosts[index].data.description}</Text>
                    <Text style={styles.cardLink}>{this.state.allPosts[index].data.link}</Text>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity onPress={()=> {this.delete(this.state.allPosts[index].docId)}} style={styles.deletebutton}>
@@ -95,7 +95,7 @@ export default class UserPost extends React.Component {
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView style={styles.scroollView}>
-                    <Text style={styles.screenTitle}>ALL POST</Text>
+                    {/* <Text style={styles.screenTitle}>ALL POST</Text> */}
                     {this.state.allPostsTemplate}
                 </ScrollView>
             </SafeAreaView>
@@ -150,12 +150,13 @@ const styles = StyleSheet.create({
         borderColor: '#03A9F4',
         borderWidth: 1,
         borderRadius: 5,
-        alignSelf: 'center'
+        alignSelf: 'center',
     },
     buttonText: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#fff'
+        color: '#fff',
+        fontFamily: 'Inter_400Regular'
     },
     buttonContainer: {
         flex: 1,
@@ -164,11 +165,13 @@ const styles = StyleSheet.create({
     cardTitle: {
         fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 10
+        marginBottom: 10,
+        fontFamily: 'Inter_400Regular'
     },
     cardLink: {
         marginTop: 10,
         fontStyle: 'italic',
-        color: '#03A9F4'
+        color: '#03A9F4',
+        fontFamily: 'Inter_400Regular'
     }
 })

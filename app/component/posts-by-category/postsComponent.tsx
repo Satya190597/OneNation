@@ -22,8 +22,8 @@ export default class Posts extends React.Component {
         let posts = []
 
         db.collection('posts').get().then((snapshots) => {
-
             snapshots.forEach((doc) => {
+                console.log(doc.data().category +" "+ this.props.navigation.getParam('CATEGORY'))
                 if(doc.data().category === this.props.navigation.getParam('CATEGORY')) {
                     posts.push({data:doc.data(),docId:doc.id})
                     this.state.postsLenght.push(1)
@@ -57,7 +57,7 @@ export default class Posts extends React.Component {
            template.push(
                <View style={styles.card} key={index}>
                     <Text style={styles.cardTitle}>{this.state.allPosts[index].data.title}</Text>
-                    <Text numberOfLines={this.state.postsLenght[index]}>{this.state.allPosts[index].data.description}</Text>
+                    <Text numberOfLines={this.state.postsLenght[index]} style={{fontFamily: 'Inter_400Regular'}}>{this.state.allPosts[index].data.description}</Text>
                     <Text onPress={()=>{this.readMore(index)}} style={styles.readMoreText}>{this.state.postsReadButtonText[index]}</Text>
                     <Text style={styles.cardLink}>Reference : {this.state.allPosts[index].data.link}</Text>
                </View>
@@ -105,17 +105,20 @@ const styles = StyleSheet.create({
     cardTitle: {
         fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 10
+        marginBottom: 10,
+        fontFamily: 'Inter_400Regular'
     },
     cardLink: {
         marginTop: 10,
         fontStyle: 'italic',
-        color: '#03A9F4'
+        color: '#03A9F4',
+        fontFamily: 'Inter_400Regular'
     },
     readMoreText: {
         fontSize: 15,
         color: '#FFA611',
         fontWeight: 'bold',
-        marginTop: 5
+        marginTop: 5,
+        fontFamily: 'Inter_400Regular'
     }
 })
