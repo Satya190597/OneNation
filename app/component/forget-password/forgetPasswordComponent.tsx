@@ -30,14 +30,14 @@ export default class ForgetPassword extends React.Component {
         Firebase.auth().sendPasswordResetEmail(this.state.email).then(function() {
             Alert.alert('Please Check Your Email For Reset Link')
         }).catch(function(error) {
-            Alert.alert('Something Went Wrong')
+            Alert.alert('Please Entered The registered Email')
         });
     }
 
     render() {
         return(
             <View style={styles.container}>
-                <Text>Enter Your Registered Email</Text>
+                <Text style={{ fontFamily: 'Inter_400Regular'}}>Enter Your Registered Email</Text>
                 <TextInput
                 style={styles.inputBox}
                 value={this.state.email}
@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         borderColor: '#d3d3d3',
         borderBottomWidth: 1,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontFamily: 'Inter_400Regular'
     },
     button: {
         marginTop: 30,
@@ -85,6 +86,7 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#fff'
+        color: '#fff',
+        fontFamily: 'Inter_400Regular'
     },
 })

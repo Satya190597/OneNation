@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button,StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView,Alert } from 'react-native';
+import { Button,StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView,Alert,Linking } from 'react-native';
 import Firebase, {db}from '../../../config/firebase'
 import { TextInput } from 'react-native-gesture-handler';
 
@@ -25,7 +25,10 @@ export default class UserPost extends React.Component {
 
     state = {
         allPosts : [],
-        allPostsTemplate: []
+        allPostsTemplate: [],
+        postsLenght: [],
+        postsReadButtonText: [],
+        isLoaded: false
     }
 
     componentDidMount() {
@@ -47,15 +50,26 @@ export default class UserPost extends React.Component {
                 console.log(doc.data().user + ' ' + currentuser.email)
                 if(doc.data().user === currentuser.email) {
                     posts.push({data:doc.data(),docId:doc.id})
+                    this.state.postsLenght.push(1)
+                    this.state.postsReadButtonText.push('Read More')
                 }
             })
-
+            this.setState({isLoaded:true})
             this.setState({allPosts:posts})
             this.createTemplate()
         })
         .catch((error) => {
             console.log(error)
         })
+    }
+    readMore(index) {
+        const postsLength = this.state.postsLenght
+        const postsReadButtonText = this.state.postsReadButtonText
+        postsReadButtonText[index] = postsReadButtonText[index] === 'Read More' ? 'Read Less' : 'Read More'
+        postsLength[index] = postsLength[index] === 1 ? undefined : 1
+        this.setState({postsLenght:postsLength})
+        this.setState({postsReadButtonText:postsReadButtonText})
+        this.createTemplate()
     }
 
     /**
@@ -88,8 +102,21 @@ export default class UserPost extends React.Component {
            template.push(
                <View style={styles.card} key={index}>
                    <Text style={styles.cardTitle}>{this.state.allPosts[index].data.title}</Text>
-                   <Text style={{fontFamily: 'Inter_400Regular'}}>{this.state.allPosts[index].data.description}</Text>
-                   <Text style={styles.cardLink}>{this.state.allPosts[index].data.link}</Text>
+                   <Text numberOfLines={this.state.postsLenght[index]} style={{fontFamily: 'Inter_400Regular'}}>{this.state.allPosts[index].data.description}</Text>
+                   <Text onPress={()=>{this.readMore(index)}} style={styles.readMoreText}>{this.state.postsReadButtonText[index]}</Text>
+                   <Text style={styles.cardLink} onPress={()=>{
+                        const url = this.state.allPosts[index].data.link
+                        Linking.canOpenURL(url)
+                            .then(supported => {
+                                if (!supported)
+                                    Alert.alert('Unable To Open Reference '+url)
+                                else
+                                    return Linking.openURL(url);
+                            })
+                            .catch(err => { 
+                                Alert.alert('Something Went Wrong With Reference '+url)
+                            })
+                    }}>Reference : {this.state.allPosts[index].data.link}</Text>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity onPress={()=> {this.delete(this.state.allPosts[index].docId)}} style={styles.deletebutton}>
                             <Text  style={styles.buttonText}>Delete</Text>
@@ -108,10 +135,15 @@ export default class UserPost extends React.Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <ScrollView style={styles.scroollView}>
-                    {/* <Text style={styles.screenTitle}>ALL POST</Text> */}
-                    {this.state.allPostsTemplate}
-                </ScrollView>
+                { this.state.isLoaded === true &&
+                    <ScrollView style={styles.scroollView}>
+                        {this.state.allPostsTemplate}  
+                    </ScrollView>
+                }
+                {
+                    this.state.isLoaded === false && 
+                    <Text style={styles.loadingText}>Loading ...</Text>
+                }
             </SafeAreaView>
         )
     }
@@ -168,7 +200,6 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontSize: 20,
-        fontWeight: 'bold',
         color: '#fff',
         fontFamily: 'Inter_400Regular'
     },
@@ -187,5 +218,17 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
         color: '#03A9F4',
         fontFamily: 'Inter_400Regular'
+    },
+    readMoreText: {
+        fontSize: 15,
+        color: '#FFA611',
+        fontWeight: 'bold',
+        marginTop: 5,
+        fontFamily: 'Inter_400Regular'
+    },
+    loadingText: {
+        fontFamily:'Inter_400Regular',
+        fontSize: 20,
+        color: '#1976D2'
     }
 })

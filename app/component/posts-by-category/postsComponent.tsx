@@ -44,10 +44,9 @@ export default class Posts extends React.Component {
                     posts.push({data:doc.data(),docId:doc.id})
                     this.state.postsLenght.push(1)
                     this.state.postsReadButtonText.push('Read More')
-                    this.setState({isLoaded:true})
                 }
             })
-
+            this.setState({isLoaded:true})
             this.setState({allPosts:posts})
             this.createTemplate()
         })
@@ -97,6 +96,11 @@ export default class Posts extends React.Component {
 
         const template = []
 
+        
+        if(this.state.allPosts.length===0) {
+            template.push(<Text>No Posts Found ...</Text>)
+        }
+
         for(let index = 0; index < this.state.allPosts.length; index++) {
             
             /**
@@ -114,7 +118,19 @@ export default class Posts extends React.Component {
                     <Text style={styles.cardTitle}>{this.state.allPosts[index].data.title}</Text>
                     <Text numberOfLines={this.state.postsLenght[index]} style={{fontFamily: 'Inter_400Regular'}}>{this.state.allPosts[index].data.description}</Text>
                     <Text onPress={()=>{this.readMore(index)}} style={styles.readMoreText}>{this.state.postsReadButtonText[index]}</Text>
-                    <Text style={styles.cardLink} onPress={()=>{Linking.openURL(this.state.allPosts[index].data.link)}}>Reference : {this.state.allPosts[index].data.link}</Text>
+                    <Text style={styles.cardLink} onPress={()=>{
+                        const url = this.state.allPosts[index].data.link
+                        Linking.canOpenURL(url)
+                            .then(supported => {
+                                if (!supported)
+                                    Alert.alert('Unable To Open Reference '+url)
+                                else
+                                    return Linking.openURL(url);
+                            })
+                            .catch(err => { 
+                                Alert.alert('Something Went Wrong With Reference '+url)
+                            })
+                    }}>Reference : {this.state.allPosts[index].data.link}</Text>
                     <View style={styles.cardFooter}>
                         <AntDesign name="like1" size={20} color={upvoteColor} onPress={()=>{this.upvote(index)}} />
                         <Text style={styles.upvotesText}>{this.state.allPosts[index].data.upvote.length}</Text>

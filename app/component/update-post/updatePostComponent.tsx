@@ -61,6 +61,13 @@ export default class UpdatePost extends React.Component {
      */
     updatePost = () => {
 
+        if(this.state.title.length<=5)
+            return Alert.alert('Title Should Be Greater Then 5 Characters')
+        if(this.state.description<=50)
+            return Alert.alert('Description Should Be Greater Then 50 Characters')
+        if(/((ftp|https?):\/\/)?(www\.)?[a-z0-9\-\.]{3,}\.[a-z]{3}$/.test(this.state.link)===false)
+            return Alert.alert('Please Enter A Valid Link')
+
         const previouspost = db.collection("posts").doc(this.props.navigation.getParam('DOCID'))
 
         previouspost.update({
@@ -95,7 +102,11 @@ export default class UpdatePost extends React.Component {
                     defaultValue={this.state.category}
                     containerStyle={{height: 40,width:'85%',margin: 10}}
                     itemStyle={{
-                        justifyContent: 'flex-start'
+                        justifyContent: 'flex-start',
+                        fontFamily: 'Inter_400Regular'
+                    }}
+                    itemTextStyle={{
+                        fontFamily: 'Inter_400Regular'
                     }}
                     dropDownStyle={{backgroundColor: '#fafafa'}}
                     onChangeItem={item => this.setState({category: item.value})}
@@ -146,7 +157,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         borderColor: '#d3d3d3',
         borderBottomWidth: 1,
-        textAlign: 'center'
+        textAlign: 'center',
+        fontFamily: 'Inter_400Regular'
     },
     button: {
         marginTop: 30,
@@ -162,6 +174,7 @@ const styles = StyleSheet.create({
     buttonText: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#fff'
+        color: '#fff',
+        fontFamily: 'Inter_400Regular'
     },
 })
