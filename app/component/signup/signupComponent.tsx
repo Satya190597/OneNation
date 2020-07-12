@@ -1,5 +1,5 @@
 import React from 'react'
-import {View,Text,TextInput,TouchableOpacity,StyleSheet} from 'react-native'
+import {View,Text,TextInput,TouchableOpacity,StyleSheet,Alert} from 'react-native'
 import Firebase from  '../../../config/firebase'
 
 export default class SignUp extends React.Component {
@@ -10,18 +10,48 @@ export default class SignUp extends React.Component {
         password: ''
     }
 
+    static navigationOptions = {
+        title: 'Sign Up',
+        headerTintColor: '#ffffff',
+        headerStyle: {
+          backgroundColor: '#D35400',
+          borderBottomColor: '#D35400',
+          borderBottomWidth: 3,
+        },
+        headerTitleStyle: {
+          fontSize: 20,
+          fontFamily: 'Inter_400Regular'
+        },
+    };
+
     handleSignUp = () => {
+
         const {email,password} = this.state
+
+        // ---------- Validate Signup Form. ----------
+
+        if(email.length<=0)
+            return Alert.alert('Please Enter An Email Id')
+        if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)===false)
+            return Alert.alert('Please Enter A Valid Email')
+        if(password.length<=5)
+            return Alert.alert('Password Must Be More Than 5 Character Long')
+        
+        // ---------- Perform SignUp Operation. ----------
+
         Firebase.auth()
                 .createUserWithEmailAndPassword(email, password)
-                .then(() => this.props.navigation.navigate('Home'))
-                .catch((error) => console.log(error))
+                .then(() => { 
+                    this.props.navigation.navigate('Home')
+                })
+                .catch((error) => {
+                    Alert.alert('This Email Is Already Registered.')
+                })
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <Text>Signup Screen</Text>
                 <TextInput
                 style={styles.inputBox}
                 placeholder='Full Name'
@@ -30,14 +60,14 @@ export default class SignUp extends React.Component {
                 </TextInput>
                 <TextInput
                 style={styles.inputBox}
-                placeholder='Email'
+                placeholder='Email *'
                 value={this.state.email}
                 autoCapitalize='none'
                 onChangeText={email=>this.setState({email:email})}>
                 </TextInput>
                 <TextInput
                 style={styles.inputBox}
-                placeholder='Password'
+                placeholder='Password *'
                 value={this.state.password}
                 secureTextEntry={true}
                 onChangeText={password=>this.setState({password:password})}>

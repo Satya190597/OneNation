@@ -10,6 +10,20 @@ export default class Login extends React.Component {
         isLoaded: false
     }
 
+    static navigationOptions = {
+        title: 'One Nation',
+        headerTintColor: '#ffffff',
+        headerStyle: {
+          backgroundColor: '#D35400',
+          borderBottomColor: '#D35400',
+          borderBottomWidth: 3,
+        },
+        headerTitleStyle: {
+          fontSize: 20,
+          fontFamily: 'Inter_400Regular'
+        },
+    };
+
     handleLogin = () => {
         Firebase.auth()
             .signInWithEmailAndPassword(this.state.email, this.state.password)
@@ -56,8 +70,8 @@ export default class Login extends React.Component {
                             <Text style={styles.buttonText}>Login</Text>
                         </TouchableOpacity>
                         <Text onPress={()=>{this.props.navigation.navigate('ForgetPassword')}} style={styles.textButton}>Forgot Password?</Text>
-                        <TouchableOpacity style={styles.signupButton} onPress={this.handleLogin}>
-                            <Text style={styles.signUpButtonText} onPress={() => this.props.navigation.navigate('Signup')}>Don't have an account yet? Sign up</Text>
+                        <TouchableOpacity style={styles.signupButton} onPress={() => this.props.navigation.navigate('Signup')}>
+                            <Text style={styles.signUpButtonText} >Don't have an account yet? Sign up</Text>
                         </TouchableOpacity>  
                     </View>
                 }
@@ -105,7 +119,8 @@ const styles = StyleSheet.create({
         borderColor: '#FFA611',
         borderWidth: 1,
         borderRadius: 5,
-        width: 200
+        width: 200,
+        
     },
     buttonText: {
         fontSize: 20,
@@ -115,7 +130,8 @@ const styles = StyleSheet.create({
     },
     title: {
         fontFamily:'Inter_400Regular',
-        fontSize: 40
+        fontSize: 40,
+        
     },
     textButton : {
         fontFamily:'Inter_400Regular',
@@ -134,8 +150,7 @@ const styles = StyleSheet.create({
         width: 300
     },
     signUpButtonText: {
-        fontSize: 20,
-        fontWeight: 'bold',
+        fontSize: 12,
         color: '#fff',
         fontFamily:'Inter_400Regular',
     },

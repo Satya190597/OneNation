@@ -12,6 +12,20 @@ export default class ForgetPassword extends React.Component {
         email: ''
     }
 
+    static navigationOptions = {
+        title: 'Get Reset Link',
+        headerTintColor: '#ffffff',
+        headerStyle: {
+          backgroundColor: '#D35400',
+          borderBottomColor: '#D35400',
+          borderBottomWidth: 3,
+        },
+        headerTitleStyle: {
+          fontSize: 20,
+          fontFamily: 'Inter_400Regular'
+        },
+    };
+
     sendResetLink = ()=>{
         Firebase.auth().sendPasswordResetEmail(this.state.email).then(function() {
             Alert.alert('Please Check Your Email For Reset Link')
