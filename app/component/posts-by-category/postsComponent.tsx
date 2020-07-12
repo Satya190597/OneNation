@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button,StyleSheet, Text, View,SafeAreaView,ScrollView,Alert } from 'react-native';
+import { Button,StyleSheet, Text, View,SafeAreaView,ScrollView,Alert,Linking } from 'react-native';
 import Firebase, {db}from '../../../config/firebase'
 import { AntDesign } from '@expo/vector-icons';
 
@@ -114,7 +114,7 @@ export default class Posts extends React.Component {
                     <Text style={styles.cardTitle}>{this.state.allPosts[index].data.title}</Text>
                     <Text numberOfLines={this.state.postsLenght[index]} style={{fontFamily: 'Inter_400Regular'}}>{this.state.allPosts[index].data.description}</Text>
                     <Text onPress={()=>{this.readMore(index)}} style={styles.readMoreText}>{this.state.postsReadButtonText[index]}</Text>
-                    <Text style={styles.cardLink}>Reference : {this.state.allPosts[index].data.link}</Text>
+                    <Text style={styles.cardLink} onPress={()=>{Linking.openURL(this.state.allPosts[index].data.link)}}>Reference : {this.state.allPosts[index].data.link}</Text>
                     <View style={styles.cardFooter}>
                         <AntDesign name="like1" size={20} color={upvoteColor} onPress={()=>{this.upvote(index)}} />
                         <Text style={styles.upvotesText}>{this.state.allPosts[index].data.upvote.length}</Text>
