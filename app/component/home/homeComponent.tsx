@@ -1,9 +1,27 @@
 import React from 'react'
 import { Button,StyleSheet, Text, View } from 'react-native';
 import Firebase, {db}from '../../../config/firebase'
+import { AntDesign } from '@expo/vector-icons';
+import { SimpleLineIcons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 
 export default class Home extends React.Component {
+
+    static navigationOptions = {
+        title: 'Welcome - To One-Nation',
+        headerTintColor: '#ffffff',
+        headerStyle: {
+          backgroundColor: '#D35400',
+          borderBottomColor: '#D35400',
+          borderBottomWidth: 3,
+        },
+        headerTitleStyle: {
+          fontSize: 20,
+          fontFamily: 'Inter_400Regular'
+        },
+    };
+
     constructor(props:any) {
         super(props)
     }
@@ -56,19 +74,22 @@ export default class Home extends React.Component {
                     title="Add New Post"
                     style={styles.userbuttons}
                     onPress={()=>{this.props.navigation.navigate('AddPost')}}>
-                    Publish A Post
+                    <SimpleLineIcons name="note" size={20} color="black" style={styles.normalIcon} />
+                    &nbsp;Publish A Post
                     </Text>
                     <Text
                     title="My Posts"
                     style={styles.userbuttons}
                     onPress={()=>{this.props.navigation.navigate('UserPost')}}>
-                    My Posts
+                    <FontAwesome name="sticky-note-o" size={24} color="black" style={styles.normalIcon} />
+                    &nbsp;My Posts
                     </Text>
                     <Text
                     title="Logout"
                     style={styles.userbuttonslogout}
                     onPress={this.handleSignOut}>
-                    Logout
+                    <AntDesign name="logout" size={20} color="black" style={styles.logoutIcon}/>
+                    &nbsp;Logout
                     </Text>
                 </View>
             </View>
@@ -102,7 +123,12 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         justifyContent: 'center',
         flexDirection: 'column',
-        width: '100%',
+        width: '95%',
+        backgroundColor: '#FDFEFE',
+        borderColor:'#ECF0F1',
+        borderWidth:2,
+        borderRadius: 10,
+        marginVertical: 10
     },
     buttoncontainer : {
         flex: 1,
@@ -114,7 +140,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 10,
-        margin:10
+        margin:10,
+        borderColor:'#D35400',
+        borderWidth:2
     },
     button: {
         fontFamily:'Inter_400Regular',
@@ -132,5 +160,13 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#EF5350',
         margin: 10,
+    },
+    normalIcon: {
+        marginRight: 5,
+        color:'#1976D2'
+    },
+    logoutIcon: {
+        marginRight: 5,
+        color:'#EF5350'
     }
 })

@@ -9,6 +9,20 @@ export default class AddPost extends React.Component {
         super(props)
     }
 
+    static navigationOptions = {
+        title: 'Publish A New Post',
+        headerTintColor: '#ffffff',
+        headerStyle: {
+          backgroundColor: '#D35400',
+          borderBottomColor: '#D35400',
+          borderBottomWidth: 3,
+        },
+        headerTitleStyle: {
+          fontSize: 20,
+          fontFamily: 'Inter_400Regular'
+        },
+    };
+
     state = {
         category: 'SUGGESTION',
         title: '',
@@ -50,7 +64,6 @@ export default class AddPost extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text>Add New Post</Text>
                 <DropDownPicker
                     items={[
                         {label: 'Suggestion', value: 'SUGGESTION'},

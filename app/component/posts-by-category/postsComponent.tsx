@@ -1,12 +1,27 @@
 import React from 'react'
-import { Button,StyleSheet, Text, View,SafeAreaView,ScrollView } from 'react-native';
+import { Button,StyleSheet, Text, View,SafeAreaView,ScrollView,Alert } from 'react-native';
 import Firebase, {db}from '../../../config/firebase'
+import { AntDesign } from '@expo/vector-icons';
 
 export default class Posts extends React.Component {
 
     constructor(props) {
         super(props)
     }
+
+    static navigationOptions = {
+        title: 'Explore Posts',
+        headerTintColor: '#ffffff',
+        headerStyle: {
+          backgroundColor: '#D35400',
+          borderBottomColor: '#D35400',
+          borderBottomWidth: 3,
+        },
+        headerTitleStyle: {
+          fontSize: 20,
+          fontFamily: 'Inter_400Regular'
+        },
+    };
 
     componentDidMount() {
         this.getPosts()
@@ -15,12 +30,13 @@ export default class Posts extends React.Component {
         allPosts: [],
         allPostsTemplate: [],
         postsLenght: [],
-        postsReadButtonText: []
+        postsReadButtonText: [],
+        currentUser : Firebase.auth().currentUser.email,
+        isLoaded: false
     }
 
     getPosts() {
         let posts = []
-
         db.collection('posts').get().then((snapshots) => {
             snapshots.forEach((doc) => {
                 console.log(doc.data().category +" "+ this.props.navigation.getParam('CATEGORY'))
@@ -28,6 +44,7 @@ export default class Posts extends React.Component {
                     posts.push({data:doc.data(),docId:doc.id})
                     this.state.postsLenght.push(1)
                     this.state.postsReadButtonText.push('Read More')
+                    this.setState({isLoaded:true})
                 }
             })
 
@@ -36,6 +53,33 @@ export default class Posts extends React.Component {
         })
         .catch((error) => {
             console.log(error)
+        })
+    }
+
+    upvote(index) {
+        let post = this.state.allPosts[index]
+        console.log(post)
+        if(!post.data.upvote.includes(this.state.currentUser)) {
+            let upvotes = post.data.upvote
+            upvotes.push(this.state.currentUser)
+            post.data.upvote = upvotes 
+        }
+        else {
+            let upvotes = post.data.upvote
+            upvotes.splice(upvotes.indexOf(this.state.currentUser),1)
+            post.data.upvote = upvotes
+        }
+        const docref = db.collection("posts").doc(post.docId)
+        this.state.allPosts[index].data.upvote = post.data.upvote
+        this.createTemplate()
+        docref.update({
+            upvote:post.data.upvote
+        })
+        .then(result => {
+            Alert.alert('Thankyou For Your Vote... ')
+        })
+        .catch(error => {
+            Alert.alert('Something Went Wrong ...')
         })
     }
 
@@ -54,14 +98,30 @@ export default class Posts extends React.Component {
         const template = []
 
         for(let index = 0; index < this.state.allPosts.length; index++) {
-           template.push(
-               <View style={styles.card} key={index}>
+            
+            /**
+             * Like Logic Start
+             */
+            let upvotesArray = this.state.allPosts[index].data.upvote
+            let upvoteColor = upvotesArray.includes(this.state.currentUser) ? '#8BC34A':'#FFB74D'
+            /**
+             * Like Logic Ends
+             */
+
+        
+            template.push(
+                <View style={styles.card} key={index}>
                     <Text style={styles.cardTitle}>{this.state.allPosts[index].data.title}</Text>
                     <Text numberOfLines={this.state.postsLenght[index]} style={{fontFamily: 'Inter_400Regular'}}>{this.state.allPosts[index].data.description}</Text>
                     <Text onPress={()=>{this.readMore(index)}} style={styles.readMoreText}>{this.state.postsReadButtonText[index]}</Text>
                     <Text style={styles.cardLink}>Reference : {this.state.allPosts[index].data.link}</Text>
-               </View>
-           )
+                    <View style={styles.cardFooter}>
+                        <AntDesign name="like1" size={20} color={upvoteColor} onPress={()=>{this.upvote(index)}} />
+                        <Text style={styles.upvotesText}>{this.state.allPosts[index].data.upvote.length}</Text>
+                        <Text style={styles.authorText}>Author : {this.state.allPosts[index].data.user}</Text>
+                    </View>
+                </View>
+            )
         }
 
         this.setState({allPostsTemplate:template})
@@ -70,10 +130,15 @@ export default class Posts extends React.Component {
     render() {
         return(
             <SafeAreaView style={styles.container}>
-                <ScrollView style={styles.scroollView}>
-                    {/* <Text style={styles.screenTitle}>All Posts</Text> */}
-                    {this.state.allPostsTemplate}
-                </ScrollView>
+                { this.state.isLoaded === true &&
+                    <ScrollView style={styles.scroollView}>
+                        {this.state.allPostsTemplate}  
+                    </ScrollView>
+                }
+                {
+                    this.state.isLoaded === false && 
+                    <Text style={styles.loadingText}>Loading ...</Text>
+                }
             </SafeAreaView>
         )
     }
@@ -89,14 +154,16 @@ const styles = StyleSheet.create({
     },
     scroollView : {
         width: '100%',
-        flex: 1
+        flex: 1,
     },
     card: {
         width: '85%',
         padding: 20,
         backgroundColor: '#FFF8E1',
         margin: 20,
-        borderRadius: 20
+        borderRadius: 20,
+        flex: 1,
+        alignSelf: 'center'
     },
     screenTitle: {
         margin: 20,
@@ -120,5 +187,28 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: 5,
         fontFamily: 'Inter_400Regular'
+    },
+    cardFooter : {
+        flex: 1,
+        flexDirection: 'row',
+        padding: 5,
+        alignItems: 'flex-end'
+    },
+    upvotesText: {
+        fontSize: 20,
+        color: '#03A9F4',
+        marginLeft: 10,
+        fontFamily: 'Inter_400Regular'
+    },
+    authorText: {
+        fontSize: 10,
+        color: '#FF5722',
+        marginLeft: 10,
+        fontFamily: 'Inter_400Regular',
+    },
+    loadingText: {
+        fontFamily:'Inter_400Regular',
+        fontSize: 20,
+        color: '#1976D2'
     }
 })

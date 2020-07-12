@@ -9,6 +9,20 @@ export default class UpdatePost extends React.Component {
         super(props)
     }
 
+    static navigationOptions = {
+        title: 'Edit Your Post',
+        headerTintColor: '#ffffff',
+        headerStyle: {
+          backgroundColor: '#D35400',
+          borderBottomColor: '#D35400',
+          borderBottomWidth: 3,
+        },
+        headerTitleStyle: {
+          fontSize: 20,
+          fontFamily: 'Inter_400Regular'
+        },
+    };
+
     state = {
         category: 'SUGGESTION',
         title: '',
