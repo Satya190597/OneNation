@@ -14,6 +14,7 @@ import UserPost from './app/component/user-post/userPostComponent'
 import Posts from './app/component/posts-by-category/postsComponent'
 import UpdatePost from './app/component/update-post/updatePostComponent'
 import ForgetPassword from './app/component/forget-password/forgetPasswordComponent'
+import AllPost from './app/component/all-posts/allPostsComponent'
 import { useFonts, Inter_900Black, Inter_100Thin, Inter_400Regular } from '@expo-google-fonts/inter';
 
 
@@ -26,6 +27,7 @@ export default function App() {
     UserPost:UserPost,
     Posts:Posts,
     UpdatePost:UpdatePost,
+    AllPost:AllPost
   })
 
   const SwitchNavigation = createAppContainer(stack)

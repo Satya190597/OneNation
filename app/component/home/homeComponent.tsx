@@ -85,6 +85,13 @@ export default class Home extends React.Component {
                     &nbsp;My Posts
                     </Text>
                     <Text
+                    title="All Posts"
+                    style={styles.userbuttons}
+                    onPress={()=>{this.props.navigation.navigate('AllPost')}}>
+                    <FontAwesome name="sticky-note-o" size={24} color="black" style={styles.normalIcon} />
+                    &nbsp;My Posts
+                    </Text>
+                    <Text
                     title="Logout"
                     style={styles.userbuttonslogout}
                     onPress={this.handleSignOut}>

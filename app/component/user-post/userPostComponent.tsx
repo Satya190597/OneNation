@@ -25,10 +25,12 @@ export default class UserPost extends React.Component {
 
     state = {
         allPosts : [],
+        allPostsSnapshots: [],
         allPostsTemplate: [],
         postsLenght: [],
         postsReadButtonText: [],
-        isLoaded: false
+        isLoaded: false,
+        loadMoreText: 'Read More'
     }
 
     componentDidMount() {
@@ -38,29 +40,73 @@ export default class UserPost extends React.Component {
     /**
      * ---------- Get All The Posts Of A Current User. ----------
      */
-    getPosts() {
+    getPosts = () => {
+
+        this.setState({loadMoreText:'Loading ...'})
 
         const currentuser = Firebase.auth().currentUser
         let posts = []
+        let postsSnapshots = []
 
-        db.collection('posts').get().then((snapshots) => {
-
-            snapshots.forEach((doc) => {
-
-                console.log(doc.data().user + ' ' + currentuser.email)
-                if(doc.data().user === currentuser.email) {
-                    posts.push({data:doc.data(),docId:doc.id})
-                    this.state.postsLenght.push(1)
-                    this.state.postsReadButtonText.push('Read More')
+        if(this.state.allPosts.length<=0) {
+            db.collection('posts')
+            .where("user","==",currentuser.email)
+            .orderBy("title")
+            .limit(3)
+            .get()
+            .then((snapshots) => {
+                if(snapshots.size>0) {
+                    snapshots.forEach((doc) => {
+                        posts.push({data:doc.data(),docId:doc.id})
+                        postsSnapshots.push(doc)
+                        this.state.postsLenght.push(1)
+                        this.state.postsReadButtonText.push('Read More')
+                    })
+                    this.setState({isLoaded:true})
+                    this.setState({allPosts:posts})
+                    this.setState({allPostsSnapshots:postsSnapshots})
+                    this.createTemplate()
+                    this.setState({loadMoreText:'Read More'})
+                }
+                else {
+                    this.setState({loadMoreText:'No More Posts !'})
                 }
             })
-            this.setState({isLoaded:true})
-            this.setState({allPosts:posts})
-            this.createTemplate()
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+            .catch((error) => {
+                console.log(error)
+            })
+        }
+        else {
+            posts = this.state.allPosts
+            postsSnapshots = this.state.allPostsSnapshots
+            db.collection('posts')
+            .where("user","==",currentuser.email)
+            .orderBy("title")
+            .startAfter(this.state.allPostsSnapshots[this.state.allPostsSnapshots.length-1])
+            .limit(3)
+            .get()
+            .then((snapshots) => {
+                if(snapshots.size>0) {
+                    snapshots.forEach((doc) => {
+                        posts.push({data:doc.data(),docId:doc.id})
+                        postsSnapshots.push(doc)
+                        this.state.postsLenght.push(1)
+                        this.state.postsReadButtonText.push('Read More')
+                    })
+                    this.setState({isLoaded:true})
+                    this.setState({allPosts:posts})
+                    this.setState({allPostsSnapshots:postsSnapshots})
+                    this.createTemplate()
+                    this.setState({loadMoreText:'Read More'})
+                }
+                else {
+                    this.setState({loadMoreText:'No More Posts !'})
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        }
     }
     readMore(index) {
         const postsLength = this.state.postsLenght
@@ -138,6 +184,9 @@ export default class UserPost extends React.Component {
                 { this.state.isLoaded === true &&
                     <ScrollView style={styles.scroollView}>
                         {this.state.allPostsTemplate}  
+                        <View style={styles.loadMore}>
+                        <Text style={styles.loadMoreText} onPress={this.getPosts}>{this.state.loadMoreText}</Text>
+                        </View>
                     </ScrollView>
                 }
                 {
@@ -159,14 +208,15 @@ const styles = StyleSheet.create({
     },
     scroollView : {
         width: '100%',
-        flex: 1
+        flex: 1,
     },
     card: {
         width: '85%',
         padding: 20,
         backgroundColor: '#FFF8E1',
         margin: 20,
-        borderRadius: 20
+        borderRadius: 20,
+        alignSelf: 'center'
     },
     screenTitle: {
         margin: 20,
@@ -230,5 +280,19 @@ const styles = StyleSheet.create({
         fontFamily:'Inter_400Regular',
         fontSize: 20,
         color: '#1976D2'
+    },
+    loadMore: {
+        marginVertical: 10,
+        backgroundColor: '#FAE5D3',
+        borderRadius: 10,
+        width: '85%',
+        alignSelf: 'center',
+        padding: 20
+    },
+    loadMoreText: {
+        alignSelf: 'center',
+        fontFamily:'Inter_400Regular',
+        fontSize: 20,
+        color: '#D35400'
     }
 })

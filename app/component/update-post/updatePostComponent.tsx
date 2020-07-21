@@ -91,7 +91,6 @@ export default class UpdatePost extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text>Add New Post</Text>
                 <DropDownPicker
                     items={[
                         {label: 'Suggestion', value: 'SUGGESTION'},
