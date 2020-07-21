@@ -40,7 +40,6 @@ export default class UpdatePost extends React.Component {
         const post = db.collection("posts").doc(this.props.navigation.getParam('DOCID'))
         post.get().then((doc) => {
             if(doc.exists) {
-                console.log('--- DOC PRESENT ---')
                 this.setState({
                     category:doc.data().category,
                     title:doc.data().title,
@@ -74,7 +73,8 @@ export default class UpdatePost extends React.Component {
             category:this.state.category,
             title:this.state.title,
             description:this.state.description,
-            link:this.state.link
+            link:this.state.link,
+            updatedAt:new Date()
         })
         .then(result => {
             Alert.alert('Post updated successfully')
@@ -102,7 +102,6 @@ export default class UpdatePost extends React.Component {
                     containerStyle={{height: 40,width:'85%',margin: 10}}
                     itemStyle={{
                         justifyContent: 'flex-start',
-                        fontFamily: 'Inter_400Regular'
                     }}
                     itemTextStyle={{
                         fontFamily: 'Inter_400Regular'

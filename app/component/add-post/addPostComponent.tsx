@@ -53,6 +53,7 @@ export default class AddPost extends React.Component {
             downvote: [],
             spam: [],
             isAuthorized:false,
+            createdAt:new Date()
         }
         db.collection('posts')
         .doc()
@@ -83,7 +84,6 @@ export default class AddPost extends React.Component {
                     containerStyle={{height: 40,width:'85%',margin: 10}}
                     itemStyle={{
                         justifyContent: 'flex-start',
-                        fontFamily: 'Inter_400Regular'
                     }}
                     itemTextStyle={{
                         fontFamily: 'Inter_400Regular'
